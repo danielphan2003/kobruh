@@ -1,22 +1,39 @@
-# Welcome to [Astro](https://astro.build)
+# Welcome to [Kobruh](https://kobruh.netlify.app)
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+> 🧑‍🚀 **I really want to fly** But then I won't be able to flop.
 
 ## 🚀 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
+Inside of our project, you'll see the following folders and files:
 
 ```
 /
+├── .vscode/
 ├── public/
+│   ├── assets/
 │   ├── robots.txt
-│   └── favicon.svg
+│   └── favicon.png
+├── layouts/
+│   └── BasicLayout.astro
 ├── src/
 │   ├── components/
-│   │   └── Tour.astro
+│   │   ├── MenuNav/
+│   │   ├── SearchBar/
+│   │   ├── TopNav/
+│   │   └── Button.astro
 │   └── pages/
+│       ├── $movie.astro
 │       └── index.astro
-└── package.json
+├── .envrc
+├── .gitignore
+├── .npmrc
+├── astro.config.mjs
+├── package.json
+├── pnpm-lock.yaml
+├── README.md
+├── shell.nix
+├── snowpack.config.mjs
+└── tailwind.config.js
 ```
 
 Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
@@ -31,10 +48,10 @@ All commands are run from the root of the project, from a terminal:
 
 | Command         | Action                                      |
 |:----------------|:--------------------------------------------|
-| `npm install`   | Installs dependencies                       |
-| `npm run start` | Starts local dev server at `localhost:3000` |
-| `npm run build` | Build your production site to `./dist/`     |
+| `pnpm install`  | Installs dependencies                       |
+| `pnpm start`    | Starts local dev server at `localhost:3000` |
+| `pnpm build`    | Build your production site to `./dist/`     |
 
 ## 👀 Want to learn more?
 
-Feel free to check [our documentation](https://github.com/snowpackjs/astro) or jump into our [Discord server](https://astro.build/chat).
+Feel free to check [astro documentation](https://github.com/snowpackjs/astro) or jump into Astro's [Discord server](https://astro.build/chat).
