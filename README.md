@@ -10,7 +10,7 @@ Inside of your Astro project, you'll see the following folders and files:
 /
 ├── public/
 │   ├── robots.txt
-│   └── favicon.ico
+│   └── favicon.svg
 ├── src/
 │   ├── components/
 │   │   └── Tour.astro

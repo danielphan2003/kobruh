@@ -1,0 +1,69 @@
+---
+import BasicLayout from "../layouts/BasicLayout.astro";
+import { apiThvli, getRibbonInfo, getRibbonPage } from "../utils/thvli";
+
+const { collection } = Astro.props;
+
+export async function createCollection() {
+  const range = (start, end, length = end - start + 1) =>
+    Array.from({ length }, (_, i) => start + i)
+
+  const menus = await apiThvli(fetch, '/menu/web-menu'); // fetch menus.
+
+  const subMovieReducer = (ribbonId) => async (acc, pageIndex) => {
+    const items = (await getRibbonPage(fetch, ribbonId, pageIndex)).items;
+    return [
+      ...(await acc),
+      ...items,
+    ];
+  };
+
+  const ribbonReducer = async (acc, ribbon) => {
+    const ribbonInfo = await getRibbonInfo(fetch, ribbon.id);
+
+    const pageTotal =
+      Math.floor(ribbonInfo.metadata.total / ribbonInfo.metadata.limit);
+      + (ribbonInfo.metadata.total % ribbonInfo.metadata.limit < ribbonInfo.metadata.limit ? 1 : 0);
+
+    const subMovies = await range(1, pageTotal - 1).reduce(subMovieReducer(ribbon.id), []);
+
+    return [
+      ...(await acc),
+      ...ribbonInfo.items,
+      ...subMovies,
+    ];
+  };
+
+  const menuReducer = async (acc, menu) => {
+    const { ribbons } = await apiThvli(fetch, `/page/${menu.slug}`);
+    const filteredRibbons = ribbons.filter(ribbon => ribbon.name != "Hot Clip");
+    const movies = await filteredRibbons.reduce(ribbonReducer, []);
+
+    return [
+      ...(await acc),
+      ...movies
+    ];
+  };
+
+  const allMovies = await menus.reduce(menuReducer, []);
+
+  allMovies.sort((a, b) => a.title.localeCompare(b.title)); // sort by title.
+
+  return {
+    routes: allMovies.map((movie, i) => {
+      const params = {name: movie.slug, index: i};
+      return params;
+    }),
+    permalink: ({ params }) => `/movie/${params.name}`,
+    async data({ params }) {
+      return [ allMovies[params.index] ];
+    },
+    pageSize: Infinity,
+  };
+}
+---
+<BasicLayout title={collection.data[0].title}>
+  <h1>{collection.data[0].title}</h1>
+  <time>{collection.data[0].publish_date}</time>
+  <img src={collection.data[0].images.thumbnail}>
+</BasicLayout>
